@@ -57,6 +57,13 @@ const facet = new function() {
   
       connectedCallback() {
         const content = template.content.cloneNode(true)
+        if (shadowMode === 'none') {
+            const slotContent = this.innerHTML
+            this.innerHTML = ''
+            content.querySelectorAll('slot').forEach(slot => {
+              slot.innerHTML = slotContent
+            })
+        }
         const mixins = Object.values(facet.mixins).filter(m => m.applyGlobally || applyMixins.includes(m.name))
         for(let mixin of mixins) {
           content[mixin.attachPosition](mixin.template.content.cloneNode(true))
